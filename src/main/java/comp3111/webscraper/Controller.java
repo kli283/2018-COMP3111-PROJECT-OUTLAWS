@@ -72,7 +72,6 @@ public class Controller {
     	
     	labelCount.setText("Hi");
 
-    	
     }
     
     /**
