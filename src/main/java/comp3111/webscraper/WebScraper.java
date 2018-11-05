@@ -1,8 +1,7 @@
 package comp3111.webscraper;
-
 import java.net.URLEncoder;
 import java.util.List;
-
+import java.util.Collections;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
@@ -68,6 +67,7 @@ public class WebScraper {
 
 	private static final String DEFAULT_URL = "https://newyork.craigslist.org/";
 	private WebClient client;
+	int no_of_items = 0;
 
 	/**
 	 * Default Constructor 
@@ -85,35 +85,47 @@ public class WebScraper {
 	 * @return A list of Item that has found. A zero size list is return if nothing is found. Null if any exception (e.g. no connectivity)
 	 */
 	public List<Item> scrape(String keyword) {
-
+		Vector<Item> result = new Vector<Item>();
 		try {
-			String searchUrl = DEFAULT_URL + "search/sss?sort=rel&query=" + URLEncoder.encode(keyword, "UTF-8");
-			HtmlPage page = client.getPage(searchUrl);
-
+		
+			for(int i = 0; i < 50000; i++) {
+				
+				String searchUrl = DEFAULT_URL + "search/sss?s=" + no_of_items + "&query=" + URLEncoder.encode(keyword, "UTF-8") + "&sort=rel";
+				HtmlPage page = client.getPage(searchUrl);
+	
+				
+				List<?> items = (List<?>) page.getByXPath("//li[@class='result-row']");
+				if(items.size() == 0) {
+					break;
+				}
+	
+				for (int j = 0; j < items.size(); j++) {
+					
+					HtmlElement htmlItem = (HtmlElement) items.get(j);
+					HtmlAnchor itemAnchor = ((HtmlAnchor) htmlItem.getFirstByXPath(".//p[@class='result-info']/a"));
+					HtmlElement spanPrice = ((HtmlElement) htmlItem.getFirstByXPath(".//a/span[@class='result-price']"));
+	
+					// It is possible that an item doesn't have any price, we set the price to 0.0
+					// in this case
+					String itemPrice = spanPrice == null ? "0.0" : spanPrice.asText();
+	
+					Item item = new Item();
+					item.setTitle(itemAnchor.asText());
+					item.setUrl(DEFAULT_URL + itemAnchor.getHrefAttribute());
+	
+					item.setPrice(new Double(itemPrice.replace("$", "")));
+					
+					result.add(item);
+					
+					
+				}
 			
-			List<?> items = (List<?>) page.getByXPath("//li[@class='result-row']");
-			
-			Vector<Item> result = new Vector<Item>();
-
-			for (int i = 0; i < items.size(); i++) {
-				HtmlElement htmlItem = (HtmlElement) items.get(i);
-				HtmlAnchor itemAnchor = ((HtmlAnchor) htmlItem.getFirstByXPath(".//p[@class='result-info']/a"));
-				HtmlElement spanPrice = ((HtmlElement) htmlItem.getFirstByXPath(".//a/span[@class='result-price']"));
-
-				// It is possible that an item doesn't have any price, we set the price to 0.0
-				// in this case
-				String itemPrice = spanPrice == null ? "0.0" : spanPrice.asText();
-
-				Item item = new Item();
-				item.setTitle(itemAnchor.asText());
-				item.setUrl(DEFAULT_URL + itemAnchor.getHrefAttribute());
-
-				item.setPrice(new Double(itemPrice.replace("$", "")));
-
-				result.add(item);
+				no_of_items = no_of_items + 120;
 			}
 			client.close();
 			return result;
+			
+	
 		} catch (Exception e) {
 			System.out.println(e);
 		}
