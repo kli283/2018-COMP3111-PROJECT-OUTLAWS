@@ -90,11 +90,14 @@ public class WebScraper {
 		
 			for(int i = 0; i < 50000; i++) {
 				
+				//The general URL for each page for a given search result
 				String searchUrl = DEFAULT_URL + "search/sss?s=" + no_of_items + "&query=" + URLEncoder.encode(keyword, "UTF-8") + "&sort=rel";
 				HtmlPage page = client.getPage(searchUrl);
 	
 				
 				List<?> items = (List<?>) page.getByXPath("//li[@class='result-row']");
+				
+				// If we are at the end aka last page then we break and found the last page
 				if(items.size() == 0) {
 					break;
 				}
@@ -119,13 +122,11 @@ public class WebScraper {
 					
 					
 				}
-			
+				// Each page has 120 items by default so we move 120 for each addition page
 				no_of_items = no_of_items + 120;
 			}
 			client.close();
 			return result;
-			
-	
 		} catch (Exception e) {
 			System.out.println(e);
 		}
