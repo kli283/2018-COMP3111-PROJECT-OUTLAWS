@@ -4,12 +4,18 @@
 package comp3111.webscraper;
 
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Hyperlink;
 import java.util.List;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import java.sql.Date;
 
 
 /**
@@ -42,6 +48,25 @@ public class Controller {
     
     private WebScraper scraper;
     
+    @FXML 
+    private TableView<Item> itemTable;
+    
+    @FXML 
+    private TableColumn<Item, String> itemTitle;
+    
+    @FXML 
+    private TableColumn<Item, Double> itemPrice;
+    
+    @FXML 
+    private TableColumn<Item, String> itemUrl;
+
+    @FXML 
+    private TableColumn<Item, Date> itemPosted;
+    
+//    private ObservableList items;
+
+    
+    
     /**
      * Default controller
      */
@@ -54,7 +79,10 @@ public class Controller {
      */
     @FXML
     private void initialize() {
-    	
+    	itemTitle.setCellValueFactory(new PropertyValueFactory<Item, String>("title"));
+    	itemPrice.setCellValueFactory(new PropertyValueFactory<Item, Double>("price"));
+    	itemUrl.setCellValueFactory(new PropertyValueFactory<Item, String>("url"));
+//    	itemPosted.setCellValueFactory(new PropertyValueFactory("title"));
     }
     
     /**
@@ -69,8 +97,10 @@ public class Controller {
     		output += item.getTitle() + "\t" + item.getPrice() + "\t" + item.getUrl() + "\n";
     	}
     	textAreaConsole.setText(output);
-    	
-    	labelCount.setText("Hi");
+    	ObservableList<Item> items = FXCollections.observableList(result);
+    	itemTable.setItems(items);
+
+//    	labelCount.setText("Hi");
     	
     }
     
