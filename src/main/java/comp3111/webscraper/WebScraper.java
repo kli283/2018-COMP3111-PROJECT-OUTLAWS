@@ -1,13 +1,10 @@
 package comp3111.webscraper;
 import java.net.URLEncoder;
 import java.util.List;
-import java.util.Collections;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-
-import javafx.scene.control.Hyperlink;
 
 import java.util.Vector;
 
@@ -91,16 +88,20 @@ public class WebScraper {
 	public List<Item> scrape(String keyword) {
 		Vector<Item> result = new Vector<Item>();
 		try {
-
+			
+			String searchUrl2 = SECOND_URL + "search?keyword=" + URLEncoder.encode(keyword, "UTF-8");
+			
+			HtmlPage page2 = client.getPage(searchUrl2);
+			List<?> moreItems = (List<?>) page2.getByXPath("//li[@class='search-result']");
 		
 			for(int i = 0; i < 50000; i++) {
 				
 				//The general URL for each page for a given search result
 				String searchUrl = DEFAULT_URL + "search/sss?s=" + no_of_items + "&query=" + URLEncoder.encode(keyword, "UTF-8") + "&sort=rel";
 				HtmlPage page = client.getPage(searchUrl);
-	
-				
 				List<?> items = (List<?>) page.getByXPath("//li[@class='result-row']");
+
+				
 				
 				// If we are at the end aka last page then we break and found the last page
 				if(items.size() == 0) {
@@ -154,7 +155,7 @@ public class WebScraper {
 				item.setTitle(itemAnchor.asText());
 				item.setUrl(itemAnchor.getHrefAttribute());
 
-				item.setPrice(new Double(itemPrice.replace("ï¿½", "")));
+				item.setPrice(new Double(itemPrice.replace("£", "")));
 
 				result.add(item);
 			}
