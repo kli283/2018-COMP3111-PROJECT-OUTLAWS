@@ -7,6 +7,9 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
+import javafx.scene.control.Hyperlink;
+
 import java.util.Vector;
 
 
@@ -104,9 +107,11 @@ public class WebScraper {
 				// in this case
 				String itemPrice = spanPrice == null ? "0.0" : spanPrice.asText();
 
+				Hyperlink urlHyper = new Hyperlink(DEFAULT_URL + itemAnchor.getHrefAttribute());
+				
 				Item item = new Item();
 				item.setTitle(itemAnchor.asText());
-				item.setUrl(DEFAULT_URL + itemAnchor.getHrefAttribute());
+				item.setUrl(itemAnchor.getHrefAttribute());
 
 				item.setPrice(new Double(itemPrice.replace("$", "")));
 

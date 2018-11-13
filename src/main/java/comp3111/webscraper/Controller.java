@@ -6,6 +6,8 @@ package comp3111.webscraper;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -58,7 +60,7 @@ public class Controller {
     private TableColumn<Item, Double> itemPrice;
     
     @FXML 
-    private TableColumn<Item, String> itemUrl;
+    private TableColumn<Item, Hyperlink> itemUrl;
 
     @FXML 
     private TableColumn<Item, Date> itemPosted;
@@ -81,7 +83,7 @@ public class Controller {
     private void initialize() {
     	itemTitle.setCellValueFactory(new PropertyValueFactory<Item, String>("title"));
     	itemPrice.setCellValueFactory(new PropertyValueFactory<Item, Double>("price"));
-    	itemUrl.setCellValueFactory(new PropertyValueFactory<Item, String>("url"));
+    	itemUrl.setCellValueFactory(new PropertyValueFactory<Item, Hyperlink>("url"));
 //    	itemPosted.setCellValueFactory(new PropertyValueFactory("title"));
     }
     
@@ -99,10 +101,28 @@ public class Controller {
     	textAreaConsole.setText(output);
     	ObservableList<Item> items = FXCollections.observableList(result);
     	itemTable.setItems(items);
+    	
 
 //    	labelCount.setText("Hi");
     	
     }
+    
+//    /**
+//     * Changing to Hyperlink
+//     */
+//    private void addLink(final String url) {
+//        final Hyperlink link = new Hyperlink(url);
+//        link.setOnAction(new EventHandler<ActionEvent>() {
+//
+//            @Override
+//            public void handle(ActionEvent t) {
+//                getHostServices().showDocument(link.getText());
+//                //openBrowser(link.getText());
+//            }
+//
+//        });
+//        itemTable.getItems().addAll(link);
+//    }
     
     /**
      * Called when the new button is pressed. Very dummy action - print something in the command prompt.
