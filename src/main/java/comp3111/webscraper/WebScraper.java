@@ -1,8 +1,7 @@
 package comp3111.webscraper;
-
 import java.net.URLEncoder;
 import java.util.List;
-
+import java.util.Collections;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
@@ -72,6 +71,7 @@ public class WebScraper {
 	private static final String DEFAULT_URL = "https://newyork.craigslist.org/";
 	private static final String SECOND_URL = "https://www.preloved.co.uk/";
 	private WebClient client;
+	int no_of_items = 0;
 
 	/**
 	 * Default Constructor 
@@ -89,43 +89,47 @@ public class WebScraper {
 	 * @return A list of Item that has found. A zero size list is return if nothing is found. Null if any exception (e.g. no connectivity)
 	 */
 	public List<Item> scrape(String keyword) {
-
+		Vector<Item> result = new Vector<Item>();
 		try {
-			String searchUrl = DEFAULT_URL + "search/sss?sort=rel&query=" + URLEncoder.encode(keyword, "UTF-8");
-			HtmlPage page = client.getPage(searchUrl);
-			
-			String searchNewUrl = SECOND_URL + "search?keyword=/" + URLEncoder.encode(keyword, "UTF-8");
-			HtmlPage page2 = client.getPage(searchNewUrl);
-			
-			
-			List<?> items = (List<?>) page.getByXPath("//li[@class='result-row']");
-			List<?> moreItems = (List<?>) page2.getByXPath("//li[@class='search-result']");
-			System.out.println(items);
-			System.out.println(moreItems);
-			
-			
-			Vector<Item> result = new Vector<Item>();
 
-			for (int i = 0; i < items.size(); i++) {
-				HtmlElement htmlItem = (HtmlElement) items.get(i);
-//				System.out.println("HTML ITEM: " + htmlItem);
-				HtmlAnchor itemAnchor = ((HtmlAnchor) htmlItem.getFirstByXPath(".//p[@class='result-info']/a"));
-				System.out.println("ANCHOR: " + itemAnchor);
-				HtmlElement spanPrice = ((HtmlElement) htmlItem.getFirstByXPath(".//a/span[@class='result-price']"));
-//				System.out.println("PRICE: " + spanPrice);
-				// It is possible that an item doesn't have any price, we set the price to 0.0
-				// in this case
-				String itemPrice = spanPrice == null ? "0.0" : spanPrice.asText();
-
-				Hyperlink urlHyper = new Hyperlink(DEFAULT_URL + itemAnchor.getHrefAttribute());
+		
+			for(int i = 0; i < 50000; i++) {
 				
-				Item item = new Item();
-				item.setTitle(itemAnchor.asText());
-				item.setUrl(itemAnchor.getHrefAttribute());
+				//The general URL for each page for a given search result
+				String searchUrl = DEFAULT_URL + "search/sss?s=" + no_of_items + "&query=" + URLEncoder.encode(keyword, "UTF-8") + "&sort=rel";
+				HtmlPage page = client.getPage(searchUrl);
+	
+				
+				List<?> items = (List<?>) page.getByXPath("//li[@class='result-row']");
+				
+				// If we are at the end aka last page then we break and found the last page
+				if(items.size() == 0) {
+					break;
+				}
+	
+				for (int j = 0; j < items.size(); j++) {
+					
+					HtmlElement htmlItem = (HtmlElement) items.get(j);
+					HtmlAnchor itemAnchor = ((HtmlAnchor) htmlItem.getFirstByXPath(".//p[@class='result-info']/a"));
+					HtmlElement spanPrice = ((HtmlElement) htmlItem.getFirstByXPath(".//a/span[@class='result-price']"));
+	
+					// It is possible that an item doesn't have any price, we set the price to 0.0
+					// in this case
+					String itemPrice = spanPrice == null ? "0.0" : spanPrice.asText();
+	
+					Item item = new Item();
+					item.setTitle(itemAnchor.asText());
+					item.setUrl(DEFAULT_URL + itemAnchor.getHrefAttribute());
+	
+					item.setPrice(new Double(itemPrice.replace("$", "")));
+					
+					result.add(item);
+					
+					
+				}
+				// Each page has 120 items by default so we move 120 for each addition page
+				no_of_items = no_of_items + 120;
 
-				item.setPrice(new Double(itemPrice.replace("$", "")));
-
-				result.add(item);
 			}
 			for (int i = 0; i < moreItems.size(); i++) {
 				HtmlElement htmlItem = (HtmlElement) moreItems.get(i);
@@ -150,7 +154,7 @@ public class WebScraper {
 				item.setTitle(itemAnchor.asText());
 				item.setUrl(itemAnchor.getHrefAttribute());
 
-				item.setPrice(new Double(itemPrice.replace("£", "")));
+				item.setPrice(new Double(itemPrice.replace("ï¿½", "")));
 
 				result.add(item);
 			}

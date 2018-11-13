@@ -103,8 +103,6 @@ public class Controller {
     	itemTable.setItems(items);
     	
 
-//    	labelCount.setText("Hi");
-    	
     }
     
 //    /**
