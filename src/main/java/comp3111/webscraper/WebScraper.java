@@ -6,6 +6,9 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
+import javafx.scene.control.Hyperlink;
+
 import java.util.Vector;
 
 
@@ -66,6 +69,7 @@ import java.util.Vector;
 public class WebScraper {
 
 	private static final String DEFAULT_URL = "https://newyork.craigslist.org/";
+	private static final String SECOND_URL = "https://www.preloved.co.uk/";
 	private WebClient client;
 	int no_of_items = 0;
 
@@ -87,6 +91,7 @@ public class WebScraper {
 	public List<Item> scrape(String keyword) {
 		Vector<Item> result = new Vector<Item>();
 		try {
+
 		
 			for(int i = 0; i < 50000; i++) {
 				
@@ -124,6 +129,34 @@ public class WebScraper {
 				}
 				// Each page has 120 items by default so we move 120 for each addition page
 				no_of_items = no_of_items + 120;
+
+			}
+			for (int i = 0; i < moreItems.size(); i++) {
+				HtmlElement htmlItem = (HtmlElement) moreItems.get(i);
+//				System.out.println("HTML ITEM: " + htmlItem);
+//				HtmlAnchor itemAnchor = ((HtmlAnchor) htmlItem.getFirstByXPath(".//h2[@class='search-result__content']/a"));
+				HtmlAnchor itemAnchor =  ((HtmlAnchor) htmlItem.getFirstByXPath(".//a"));
+
+				System.out.println("ANCHOR: " + itemAnchor);
+				HtmlElement spanPrice = ((HtmlElement) htmlItem.getFirstByXPath(".//span[@itemprop='price']"));
+				
+
+				// It is possible that an item doesn't have any price, we set the price to 0.0
+				// in this case
+				String itemPrice = spanPrice == null ? "0.0" : spanPrice.asText();
+//				Hyperlink urlHyper = new Hyperlink(DEFAULT_URL + itemAnchor.getHrefAttribute());
+				System.out.println("PRICE: " + itemPrice);
+				
+				System.out.println("TITLE: " + itemAnchor.asText());
+				System.out.println("URL: " + itemAnchor.getHrefAttribute());
+				
+				Item item = new Item();
+				item.setTitle(itemAnchor.asText());
+				item.setUrl(itemAnchor.getHrefAttribute());
+
+				item.setPrice(new Double(itemPrice.replace("�", "")));
+
+				result.add(item);
 			}
 			client.close();
 			return result;
