@@ -99,11 +99,29 @@ public class Controller {
     	System.out.println("actionSearch: " + textFieldKeyword.getText());
     	List<Item> result = scraper.scrape(textFieldKeyword.getText());
     	String output = "";
+    	double a = 0.0;
+    	int no_of_nonzero_items = 0;
     	
     	for (Item item : result) {
     		output += item.getTitle() + "\t" + item.getPrice() + "\t" + item.getUrl() + "\t" + item.getItemDate() + "\t" + item.getSite() + "\n";
     	}
+    	//Calculates total sum of prices and no of items.
+    	for (Item item : result) {
+    		if (item.getPrice() != 0.0 && item.getPrice() > 0.0) {
+    			a = a + item.getPrice();
+    			no_of_nonzero_items++;
+    		}
+    	}
     	textAreaConsole.setText(output);
+    	
+    	labelCount.setText(String.valueOf(result.size()));
+
+    	//calculates the average price
+    	double average_price = a/no_of_nonzero_items;
+    	System.out.println("Average Price:");
+    	System.out.println(average_price);
+    	
+    	labelPrice.setText(String.valueOf(average_price));
     	ObservableList<Item> items = FXCollections.observableList(result);
     	itemTable.setItems(items);
     	
