@@ -3,7 +3,8 @@
  */
 package comp3111.webscraper;
 
-
+import java.awt.Desktop;
+import java.net.URI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -101,6 +102,7 @@ public class Controller {
     	String output = "";
     	double a = 0.0;
     	int no_of_nonzero_items = 0;
+    	double lowest_price = 0.0;
     	
     	for (Item item : result) {
     		output += item.getTitle() + "\t" + item.getPrice() + "\t" + item.getUrl() + "\t" + item.getItemDate() + "\t" + item.getSite() + "\n";
@@ -112,8 +114,40 @@ public class Controller {
     			no_of_nonzero_items++;
     		}
     	}
-    	textAreaConsole.setText(output);
     	
+    	//calculates hyperlink smallest non zero price
+    	List<Item> SortedResult = result.stream().sorted(Comparator.comparing(Item::getPrice)).collect(Collectors.toList());
+    	for (Item item : SortedResult) {
+    		if(item.getPrice() > 0.0) {
+    			labelMin.setText(String.valueOf(item.getUrl()));
+    			lowest_price = item.getPrice();
+
+    			break;
+    		} else {
+    			labelMin.setText("-");
+    		}
+    	}
+    	labelMin.setOnAction(new EventHandler<ActionEvent>() {
+    	    @Override
+    	    public void handle(ActionEvent e) {
+    	        System.out.println("This link is clicked");
+    	    }
+    	});
+    	//Hyperlink for latest Item
+    	for (Item item : result) {
+    		labelLatest.setText(String.valueOf(item.getUrl()));
+    		break;
+    		
+    	}
+       	labelLatest.setOnAction(new EventHandler<ActionEvent>() {
+    	    @Override
+    	    public void handle(ActionEvent e) {
+    	        System.out.println("This link is clicked");
+    	    }
+    	});
+    	
+    	
+    	textAreaConsole.setText(output);
     	labelCount.setText(String.valueOf(result.size()));
 
     	//calculates the average price
@@ -124,8 +158,6 @@ public class Controller {
     	labelPrice.setText(String.valueOf(average_price));
     	ObservableList<Item> items = FXCollections.observableList(result);
     	itemTable.setItems(items);
-    	
-
     }
     
 //    /**
