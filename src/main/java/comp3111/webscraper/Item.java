@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 
 import javafx.scene.control.Hyperlink;
 
@@ -11,6 +12,8 @@ public class Item {
 	private String title ; 
 	private double price ;
 	private Hyperlink url ;
+	private Date itemDate ;
+	private String site ; 
 	
 	public String getTitle() {
 		return title;
@@ -42,7 +45,18 @@ public class Item {
 		        }
 		    }
 		});
-//		this.url = url;
+	}
+	public Date getItemDate() {
+		return itemDate;
+	}
+	public void setItemDate(Date itemDate) {
+		this.itemDate = itemDate;
+	}
+	public String getSite() {
+		return site;
+	}
+	public void setSite(String site) {
+		this.site = site;
 	}
 	
 

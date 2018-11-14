@@ -14,7 +14,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Hyperlink;
+
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import java.sql.Date;
@@ -84,7 +88,7 @@ public class Controller {
     	itemTitle.setCellValueFactory(new PropertyValueFactory<Item, String>("title"));
     	itemPrice.setCellValueFactory(new PropertyValueFactory<Item, Double>("price"));
     	itemUrl.setCellValueFactory(new PropertyValueFactory<Item, Hyperlink>("url"));
-//    	itemPosted.setCellValueFactory(new PropertyValueFactory("title"));
+    	itemPosted.setCellValueFactory(new PropertyValueFactory<Item, Date>("itemDate"));
     }
     
     /**
@@ -95,8 +99,9 @@ public class Controller {
     	System.out.println("actionSearch: " + textFieldKeyword.getText());
     	List<Item> result = scraper.scrape(textFieldKeyword.getText());
     	String output = "";
+    	
     	for (Item item : result) {
-    		output += item.getTitle() + "\t" + item.getPrice() + "\t" + item.getUrl() + "\n";
+    		output += item.getTitle() + "\t" + item.getPrice() + "\t" + item.getUrl() + "\t" + item.getItemDate() + "\t" + item.getSite() + "\n";
     	}
     	textAreaConsole.setText(output);
     	ObservableList<Item> items = FXCollections.observableList(result);
