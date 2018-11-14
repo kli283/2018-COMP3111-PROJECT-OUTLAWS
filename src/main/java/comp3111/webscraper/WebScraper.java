@@ -173,6 +173,7 @@ public class WebScraper {
 			client.close();
 			// Sorting the list of results
 			List<Item> SortedResult = result.stream().sorted(Comparator.comparing(Item::getPrice)).collect(Collectors.toList());
+			no_of_items = 0;
 			return SortedResult;
 		} catch (Exception e) {
 			System.out.println(e);
