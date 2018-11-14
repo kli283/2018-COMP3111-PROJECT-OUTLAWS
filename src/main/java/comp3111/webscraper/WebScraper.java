@@ -122,7 +122,7 @@ public class WebScraper {
 					item.setTitle(itemAnchor.asText());
 					item.setUrl(DEFAULT_URL + itemAnchor.getHrefAttribute());
 	
-					item.setPrice(new Double(itemPrice.replace("$", "")));
+					item.setPrice(new Double(itemPrice.replace("$", "").replace(",", "")));
 					
 					result.add(item);
 					
@@ -155,7 +155,7 @@ public class WebScraper {
 				item.setTitle(itemAnchor.asText());
 				item.setUrl(itemAnchor.getHrefAttribute());
 
-				item.setPrice(new Double(itemPrice.replace("£", "")));
+				item.setPrice(new Double(itemPrice.replace("£", "").replace(",", "")));
 
 				result.add(item);
 			}
