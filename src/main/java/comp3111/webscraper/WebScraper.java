@@ -108,8 +108,7 @@ public class WebScraper {
 				
 				// If we are at the end aka last page then we break and found the last page
 				if(items.size() == 0) {
-					//TODO THIS KEEPS BREAKING WHEN ON THE SECOND SEARCH
-					System.out.println("CRAIGSLIST BROKE");
+
 					break;
 				}
 	
@@ -166,14 +165,18 @@ public class WebScraper {
 				item.setTitle(itemAnchor.asText());
 				item.setUrl(itemAnchor.getHrefAttribute());
 
-				item.setPrice(new Double(itemPrice.replace("£", "").replace(",", "").replace("$", "")));
+				item.setPrice(new Double(itemPrice.replace("Â£", "").replace(",", "").replace("$", "")));
 				item.setSite("Preloved");
 				result.add(item);
 			}
 			client.close();
-			// Sorting the list of results
+
+			no_of_items = 0;
+			return result;
+
 			List<Item> SortedResult = result.stream().sorted(Comparator.comparing(Item::getPrice)).collect(Collectors.toList());
 			return SortedResult;
+
 		} catch (Exception e) {
 			System.out.println(e);
 		}
