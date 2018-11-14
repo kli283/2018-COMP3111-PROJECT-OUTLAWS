@@ -99,6 +99,7 @@ public class WebScraper {
 				
 				// If we are at the end aka last page then we break and found the last page
 				if(items.size() == 0) {
+
 					break;
 				}
 	
@@ -126,6 +127,7 @@ public class WebScraper {
 				no_of_items = no_of_items + 120;
 			}
 			client.close();
+			no_of_items = 0;
 			return result;
 		} catch (Exception e) {
 			System.out.println(e);
