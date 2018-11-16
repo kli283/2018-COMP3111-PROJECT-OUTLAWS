@@ -130,9 +130,11 @@ public class WebScraper {
 					Item item = new Item();
 					item.setTitle(itemAnchor.asText());
 					item.setUrl(itemAnchor.getHrefAttribute());
+
 					item.setItemDate(date);
 					item.setPrice(new Double(itemPrice.replace("$", "").replace(",", "")));
 					item.setSite("Craigslist");
+					
 					
 					
 					result.add(item);
