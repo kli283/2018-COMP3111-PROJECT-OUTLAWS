@@ -50,10 +50,7 @@ public class WebScraperApplication extends Application {
     	
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource(UI_FILE));
-   		
 		VBox root = (VBox) loader.load();
-   		
-		
 		Scene scene =  new Scene(root);
    		stage.setScene(scene);
    		stage.setTitle("WebScraper");

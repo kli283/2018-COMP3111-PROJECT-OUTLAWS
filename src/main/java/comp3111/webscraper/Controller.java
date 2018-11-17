@@ -3,17 +3,21 @@
  */
 package comp3111.webscraper;
 
-import java.awt.Desktop;
-import java.net.URI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.scene.control.TextArea;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 
@@ -78,13 +82,25 @@ public class Controller {
     @FXML
     private Button refineButton;
     
+    @FXML
+    private MenuItem lastSearchMenuItem;
+
+    @FXML
+    private MenuItem quitMenuItem;
     
+    @FXML
+    private MenuItem closeMenuItem;
     
+    private List<Item> searchRecordCache;
+    private List<Item> searchRecord;
+
     /**
      * Default controller
      */
     public Controller() {
     	scraper = new WebScraper();
+    	searchRecordCache = new Vector<Item>();
+    	searchRecord = new Vector<Item>();
     }
 
     /**
@@ -103,26 +119,33 @@ public class Controller {
      */
     @FXML
     private void actionSearch() {
-    	System.out.println("actionSearch: " + textFieldKeyword.getText());
-    	List<Item> result = scraper.scrape(textFieldKeyword.getText());
-    	String output = "";
-
     	
-    	for (Item item : result) {
+    	System.out.println("actionSearch: " + textFieldKeyword.getText());
+    	
+    	searchRecordCache.clear();
+    	searchRecordCache = searchRecord.stream().collect(Collectors.toList());
+    	searchRecord = scraper.scrape(textFieldKeyword.getText());
+    	
+    	updateTabs(searchRecord);
+    	
+    	refineButton.setDisable(false);
+    	lastSearchMenuItem.setDisable(false);
+    }
+    
+    /**
+     * 
+     * 
+     * @param items 
+     */
+    private void updateTabs(List<Item> items) {
+    	
+    	// Update the console tab
+    	String output = "";
+    	for (Item item : items) {
     		output += item.getTitle() + "\t" + item.getPrice() + "\t" + item.getUrl() + "\t" + item.getItemDate() + "\t" + item.getSite() + "\n";
     	}
     	textAreaConsole.setText(output);
     	
-    	updateTabs(result);
-    	
-
-    	
-    	refineButton.setDisable(false);
-    }
-    
-    
-    
-    private void updateTabs(List<Item> items) {
     	
     	double a = 0.0;
     	int no_of_nonzero_items = 0;
@@ -176,6 +199,7 @@ public class Controller {
     	
     	labelPrice.setText(String.valueOf(average_price));
     	
+    	// Update the Table tab
     	ObservableList<Item> ObservableItems = FXCollections.observableList(items);
     	itemTable.setItems(ObservableItems);
     }
@@ -200,48 +224,77 @@ public class Controller {
     
     
     /**
-     * Called when the refine button is pressed.
+     * Called when the refine button is pressed.  Filters the searched data and keeps the 
+     * items with their titles containing the keyword typed in the text area.
      */
     @FXML
     private void actionRefine() {
     	
     	String keyword = textFieldKeyword.getText().toLowerCase();
-    	String searchResult = textAreaConsole.getText();
-    	String refinedSearchResult = "";
-    	String[] itemStrings = searchResult.split("\n");
-    	List<Item> result = new Vector<Item>();
+    	List<Item> refinedSearchRecord = new Vector<Item>();
     	
-    	for(String string : itemStrings) {
-    		String[] parts = string.split("\t");
-    		String title = parts[0].toLowerCase();
-    		if(title.contains(keyword)) {
-    			refinedSearchResult = refinedSearchResult + string + "\n";
-    			Item item = new Item();
-    			item.setTitle(parts[0]);
-    			item.setPrice(new Double(parts[1]));
-    			item.setUrl(parts[2]);
-    			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
-    			LocalDate dateTime = LocalDate.parse(parts[3], formatter);
-    			item.setItemDate(java.sql.Date.valueOf(dateTime));
-    			item.setSite(parts[3]);
-    			result.add(item);
+    	for(Item item : searchRecord) {
+    		if(item.getTitle().toLowerCase().contains(keyword)) {
+    			refinedSearchRecord.add(item);
     		}
     	}
-    	textAreaConsole.setText(refinedSearchResult);
     	
-    	// Trigger the update process of the tabs
-    	updateTabs(result);
-    	
+    	updateTabs(refinedSearchRecord);
     	refineButton.setDisable(true);
     }
-
     
     /**
-     * Called when the new button is pressed. Very dummy action - print something in the command prompt.
+     * Called when the about your team button is pressed. Makes a dialog 
+     * displaying information about the team members appear.
      */
     @FXML
-    private void actionNew() {
-    	System.out.println("actionNew");
+    private void actionAbout() {
+    	final Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        VBox dialogVbox = new VBox(20);
+        dialogVbox.getChildren().add(new Text("Names: Ruben Wijkmark, Kaushal Kalyanasundaram, Kenny Li"));
+        dialogVbox.getChildren().add(new Text("ITSC: rwijkmark, kkac, klian"));
+        dialogVbox.getChildren().add(new Text("Github: RubenWijkmark, kaushalkalyan, kli283"));
+        dialog.setTitle("About");
+        dialog.setResizable(false);
+        Scene dialogScene = new Scene(dialogVbox, 330, 100);
+        dialog.setScene(dialogScene);
+        dialog.show();
     }
+    
+    /**
+     * Called when the last search button is pressed. Reverts the search results
+     * to the previous search.
+     */
+    @FXML
+    private void actionLast() {
+    	lastSearchMenuItem.setDisable(true);
+    	updateTabs(searchRecordCache);
+    }
+    
+    /**
+     * Called when the quit button is pressed. Exits the program and 
+     * closes all connections.
+     */
+    @FXML
+    private void actionQuit() {
+    	// todo
+    }
+    
+    /**
+     * Called when the close button is pressed. Clears the current search record and 
+     * initialize all tabs to their initial state.
+     */
+    @FXML
+    private void actionClose() {
+    	labelCount.setText("<total>");
+    	labelLatest.setText("<latest>");
+    	labelMin.setText("<Lowest>");
+    	labelPrice.setText("<AvgPrice>");
+    	itemTable.getItems().clear();
+    	textAreaConsole.clear();
+    	searchRecord.clear();    	
+    }
+    
 }
 
