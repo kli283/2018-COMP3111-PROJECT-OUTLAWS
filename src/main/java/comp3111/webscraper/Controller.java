@@ -287,7 +287,13 @@ public class Controller {
      */
     @FXML
     private void actionClose() {
-    	// todo
+    	labelCount.setText("<total>");
+    	labelLatest.setText("<latest>");
+    	labelMin.setText("<Lowest>");
+    	labelPrice.setText("<AvgPrice>");
+    	itemTable.getItems().clear();
+    	textAreaConsole.clear();
+    	searchRecord.clear();    	
     }
     
 }
