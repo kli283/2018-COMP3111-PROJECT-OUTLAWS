@@ -3,6 +3,7 @@
  */
 package comp3111.webscraper;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -119,7 +120,7 @@ public class Controller {
      */
     @FXML
     private void actionSearch() {
-    	
+
     	System.out.println("actionSearch: " + textFieldKeyword.getText());
     	
     	searchRecordCache.clear();
@@ -128,14 +129,17 @@ public class Controller {
     	
     	updateTabs(searchRecord);
     	
+    	if(!searchRecordCache.isEmpty()) {
+    		lastSearchMenuItem.setDisable(false);
+    	}
+    	
     	refineButton.setDisable(false);
-    	lastSearchMenuItem.setDisable(false);
     }
     
     /**
+     * Updates the data displayed in the different tabs. 
      * 
-     * 
-     * @param items 
+     * @param items - the list of items that the data will be based on.
      */
     private void updateTabs(List<Item> items) {
     	
@@ -278,7 +282,7 @@ public class Controller {
      */
     @FXML
     private void actionQuit() {
-    	// todo
+    	Platform.exit();
     }
     
     /**
@@ -288,7 +292,7 @@ public class Controller {
     @FXML
     private void actionClose() {
     	labelCount.setText("<total>");
-    	labelLatest.setText("<latest>");
+    	labelLatest.setText("<Latest>");
     	labelMin.setText("<Lowest>");
     	labelPrice.setText("<AvgPrice>");
     	itemTable.getItems().clear();
