@@ -3,8 +3,6 @@
  */
 package comp3111.webscraper;
 
-import java.awt.Desktop;
-import java.net.URI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,7 +11,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.scene.control.TextArea;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 
@@ -233,6 +236,24 @@ public class Controller {
     	updateTabs(result);
     	
     	refineButton.setDisable(true);
+    }
+    
+    /**
+     * Called when the about your team button is pressed. Makes a simple dialog that displays information about the team members appear.
+     */
+    @FXML
+    private void actionAbout() {
+    	final Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        VBox dialogVbox = new VBox(20);
+        dialogVbox.getChildren().add(new Text("Names: Ruben Wijkmark, Kaushal Kalyanasundaram, Kenny Li"));
+        dialogVbox.getChildren().add(new Text("ITSC: rwijkmark, kkac, klian"));
+        dialogVbox.getChildren().add(new Text("Github: RubenWijkmark, kaushalkalyan, kli283"));
+        dialog.setTitle("About");
+        dialog.setResizable(false);
+        Scene dialogScene = new Scene(dialogVbox, 330, 100);
+        dialog.setScene(dialogScene);
+        dialog.show();
     }
 
     

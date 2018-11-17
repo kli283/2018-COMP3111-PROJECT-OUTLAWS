@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="228.0" prefWidth="446.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.webscraper.Controller">
+   <children>
+      <Label alignment="TOP_LEFT" layoutX="15.0" layoutY="28.0" prefHeight="174.0" prefWidth="415.0" text="Members: &#10;Ruben (&lt;ITC account&gt;)&#10;Ruben (&lt;ITC account&gt;)&#10;Ruben (&lt;ITC account&gt;)&#10;&#10;Team github: &#10;https://github.com/kli283/2018-COMP3111-PROJECT-OUTLAWS">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>
