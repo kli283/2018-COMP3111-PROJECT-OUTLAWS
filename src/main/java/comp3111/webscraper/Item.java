@@ -30,6 +30,8 @@ public class Item {
 	public Hyperlink getUrl() {
 		return url;
 	}
+	
+	
 	public void setUrl(String url) {
 		this.url = new Hyperlink(url);
 		

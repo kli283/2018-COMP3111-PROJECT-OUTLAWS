@@ -91,17 +91,12 @@ public class Controller {
     
     @FXML
     private MenuItem closeMenuItem;
-    
-    private List<Item> searchRecordCache;
-    private List<Item> searchRecord;
 
     /**
      * Default controller
      */
     public Controller() {
     	scraper = new WebScraper();
-    	searchRecordCache = new Vector<Item>();
-    	searchRecord = new Vector<Item>();
     }
 
     /**
@@ -122,14 +117,11 @@ public class Controller {
     private void actionSearch() {
 
     	System.out.println("actionSearch: " + textFieldKeyword.getText());
+    	scraper.scrape(textFieldKeyword.getText());
     	
-    	searchRecordCache.clear();
-    	searchRecordCache = searchRecord.stream().collect(Collectors.toList());
-    	searchRecord = scraper.scrape(textFieldKeyword.getText());
+    	updateTabs(scraper.getSearchRecord());
     	
-    	updateTabs(searchRecord);
-    	
-    	if(!searchRecordCache.isEmpty()) {
+    	if(!scraper.getSearchRecordCache().isEmpty()) {
     		lastSearchMenuItem.setDisable(false);
     	}
     	
@@ -235,15 +227,10 @@ public class Controller {
     private void actionRefine() {
     	
     	String keyword = textFieldKeyword.getText().toLowerCase();
-    	List<Item> refinedSearchRecord = new Vector<Item>();
     	
-    	for(Item item : searchRecord) {
-    		if(item.getTitle().toLowerCase().contains(keyword)) {
-    			refinedSearchRecord.add(item);
-    		}
-    	}
+    	scraper.refineSearchRecord(keyword);
     	
-    	updateTabs(refinedSearchRecord);
+    	updateTabs(scraper.getSearchRecord());
     	refineButton.setDisable(true);
     }
     
@@ -273,7 +260,8 @@ public class Controller {
     @FXML
     private void actionLast() {
     	lastSearchMenuItem.setDisable(true);
-    	updateTabs(searchRecordCache);
+    	scraper.setSearchRecord(scraper.getSearchRecordCache().stream().collect(Collectors.toList()));
+    	updateTabs(scraper.getSearchRecord());
     }
     
     /**
@@ -297,7 +285,8 @@ public class Controller {
     	labelPrice.setText("<AvgPrice>");
     	itemTable.getItems().clear();
     	textAreaConsole.clear();
-    	searchRecord.clear();    	
+    	scraper.getSearchRecord().clear(); 	
+    	scraper.getSearchRecordCache().clear();
     }
     
 }
