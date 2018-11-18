@@ -103,20 +103,33 @@ public class Controller {
     	double a = 0.0;
     	int no_of_nonzero_items = 0;
     	double lowest_price = 0.0;
-    	
-    	for (Item item : result) {
+    	List<Item> SortedResult = result.stream().sorted(Comparator.comparing(Item::getPrice)).collect(Collectors.toList());
+    	for (Item item : SortedResult) {
     		output += item.getTitle() + "\t" + item.getPrice() + "\t" + item.getUrl() + "\t" + item.getItemDate() + "\t" + item.getSite() + "\n";
     	}
     	//Calculates total sum of prices and no of items.
-    	for (Item item : result) {
+    	for (Item item : SortedResult) {
     		if (item.getPrice() != 0.0 && item.getPrice() > 0.0) {
     			a = a + item.getPrice();
     			no_of_nonzero_items++;
     		}
     	}
+    	//Hyperlink for latest Item
     	
+        
+    	for (Item item : result) {
+    		labelLatest.setText(String.valueOf(item.getUrl()));
+    		break;
+    		
+    	}
+       	labelLatest.setOnAction(new EventHandler<ActionEvent>() {
+    	    @Override
+    	    public void handle(ActionEvent e) {
+    	        System.out.println("This link is clicked");
+    	    }
+    	});
     	//calculates hyperlink smallest non zero price
-    	List<Item> SortedResult = result.stream().sorted(Comparator.comparing(Item::getPrice)).collect(Collectors.toList());
+    	
     	for (Item item : SortedResult) {
     		if(item.getPrice() > 0.0) {
     			labelMin.setText(String.valueOf(item.getUrl()));
@@ -133,18 +146,7 @@ public class Controller {
     	        System.out.println("This link is clicked");
     	    }
     	});
-    	//Hyperlink for latest Item
-    	for (Item item : result) {
-    		labelLatest.setText(String.valueOf(item.getUrl()));
-    		break;
-    		
-    	}
-       	labelLatest.setOnAction(new EventHandler<ActionEvent>() {
-    	    @Override
-    	    public void handle(ActionEvent e) {
-    	        System.out.println("This link is clicked");
-    	    }
-    	});
+
     	
     	
     	textAreaConsole.setText(output);

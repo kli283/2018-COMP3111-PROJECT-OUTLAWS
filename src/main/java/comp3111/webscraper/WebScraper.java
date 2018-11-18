@@ -73,6 +73,7 @@ public class WebScraper {
 	private static final String SECOND_URL = "https://www.preloved.co.uk/";
 	private WebClient client;
 	int no_of_items = 0;
+	int no_of_pages = 0;
 
 	/**
 	 * Default Constructor 
@@ -110,9 +111,14 @@ public class WebScraper {
 				if(items.size() == 0) {
 					//TODO THIS KEEPS BREAKING WHEN ON THE SECOND SEARCH
 					System.out.println("CRAIGSLIST BROKE");
+					no_of_pages = 0;
 					break;
 				}
-	
+				no_of_pages++;
+				System.out.println("Searching Through Page Number: " + no_of_pages);
+				System.out.println("\n");
+				
+				
 				for (int j = 0; j < items.size(); j++) {
 					
 					HtmlElement htmlItem = (HtmlElement) items.get(j);
@@ -172,9 +178,9 @@ public class WebScraper {
 			}
 			client.close();
 			// Sorting the list of results
-			List<Item> SortedResult = result.stream().sorted(Comparator.comparing(Item::getPrice)).collect(Collectors.toList());
+			//List<Item> SortedResult = result.stream().sorted(Comparator.comparing(Item::getPrice)).collect(Collectors.toList());
 			no_of_items = 0;
-			return SortedResult;
+			return result;
 		} catch (Exception e) {
 			System.out.println(e);
 		}
