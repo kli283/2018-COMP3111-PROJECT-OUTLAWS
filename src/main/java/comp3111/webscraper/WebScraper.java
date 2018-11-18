@@ -73,6 +73,8 @@ public class WebScraper {
 	private static final String SECOND_URL = "https://www.preloved.co.uk/";
 	private WebClient client;
 	int no_of_items = 0;
+    private List<Item> searchRecordCache;
+    private List<Item> searchRecord;
 
 	/**
 	 * Default Constructor 
@@ -81,6 +83,8 @@ public class WebScraper {
 		client = new WebClient();
 		client.getOptions().setCssEnabled(false);
 		client.getOptions().setJavaScriptEnabled(false);
+    	searchRecordCache = new Vector<Item>();
+    	searchRecord = new Vector<Item>();
 	}
 
 	/**
@@ -176,11 +180,55 @@ public class WebScraper {
 			// Sorting the list of results
 			List<Item> SortedResult = result.stream().sorted(Comparator.comparing(Item::getPrice)).collect(Collectors.toList());
 			no_of_items = 0;
+			
+			// Update the stored search record cache
+			searchRecordCache.clear();
+	    	searchRecordCache = searchRecord.stream().collect(Collectors.toList());
+	    	
+	    	// Update the stored search record
+			searchRecord = SortedResult;
+			
 			return SortedResult;
+			
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 		return null;
+	}
+	
+	/**
+	 * 
+	 * Filters the stored search record.
+	 * 
+	 * @param keyword - The keyword that the search record will be filtered by.
+	 */
+	public void refineSearchRecord(String keyword){
+		
+    	List<Item> refinedSearchRecord = new Vector<Item>();
+    	
+    	for(Item item : searchRecord) {
+    		if(item.getTitle().toLowerCase().contains(keyword)) {
+    			refinedSearchRecord.add(item);
+    		}
+    	}
+    	
+    	searchRecord = refinedSearchRecord.stream().collect(Collectors.toList());
+	}
+	
+	public void setSearchRecord(List<Item> searchRecord) {
+		this.searchRecord = searchRecord;
+	}
+	
+	public void setSearchRecordCache(List<Item> searchRecordCache) {
+		this.searchRecordCache = searchRecordCache;
+	}
+	
+	public List<Item> getSearchRecord() {
+		return searchRecord;
+	}
+	
+	public List<Item> getSearchRecordCache() {
+		return searchRecordCache;
 	}
 
 }
