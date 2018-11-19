@@ -115,7 +115,7 @@ public class WebScraper {
 				// If we are at the end aka last page then we break and found the last page
 				if(items.size() == 0) {
 
-					System.out.println("CRAIGSLIST BROKE");
+					System.out.println("END of SEARCH");
 					break;
 				}
 				System.out.println("Page No: ");

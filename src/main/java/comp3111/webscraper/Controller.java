@@ -168,6 +168,7 @@ public class Controller {
     			no_of_nonzero_items++;
     		}
     	}
+     
     	
     	//calculates hyperlink smallest non zero price
     	
@@ -190,13 +191,19 @@ public class Controller {
 
        	
     	labelCount.setText(String.valueOf(items.size()));
-
+    	
     	//calculates the average price
     	double average_price = a/no_of_nonzero_items;
     	System.out.println("Average Price:");
     	System.out.println(average_price);
     	
     	labelPrice.setText(String.valueOf(average_price));
+    	
+    	if(items.size()==0) {
+    		labelPrice.setText(String.valueOf("-"));
+    		labelMin.setText(String.valueOf("-"));
+    		labelLatest.setText(String.valueOf("-"));
+    	}
     	
     	// Update the Table tab
     	ObservableList<Item> ObservableItems = FXCollections.observableList(items);
