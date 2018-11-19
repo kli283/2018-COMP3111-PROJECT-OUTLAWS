@@ -135,9 +135,23 @@ public class Controller {
      */
     private void updateTabs(List<Item> items) {
     	
+    	//Hyperlink for latest Item
+    	for (Item item : items) {
+    		labelLatest.setText(String.valueOf(item.getUrl()));
+    		break;
+    		
+    	}
+       	labelLatest.setOnAction(new EventHandler<ActionEvent>() {
+    	    @Override
+    	    public void handle(ActionEvent e) {
+    	        System.out.println("This link is clicked");
+    	    }
+    	});
+    	
+    	List<Item> SortedResult = items.stream().sorted(Comparator.comparing(Item::getPrice)).collect(Collectors.toList());
     	// Update the console tab
     	String output = "";
-    	for (Item item : items) {
+    	for (Item item : SortedResult) {
     		output += item.getTitle() + "\t" + item.getPrice() + "\t" + item.getUrl() + "\t" + item.getItemDate() + "\t" + item.getSite() + "\n";
     	}
     	textAreaConsole.setText(output);
@@ -156,7 +170,7 @@ public class Controller {
     	}
     	
     	//calculates hyperlink smallest non zero price
-    	List<Item> SortedResult = items.stream().sorted(Comparator.comparing(Item::getPrice)).collect(Collectors.toList());
+    	
     	for (Item item : SortedResult) {
     		if(item.getPrice() > 0.0) {
     			labelMin.setText(String.valueOf(item.getUrl()));
@@ -173,18 +187,7 @@ public class Controller {
     	        System.out.println("This link is clicked");
     	    }
     	});
-    	//Hyperlink for latest Item
-    	for (Item item : items) {
-    		labelLatest.setText(String.valueOf(item.getUrl()));
-    		break;
-    		
-    	}
-       	labelLatest.setOnAction(new EventHandler<ActionEvent>() {
-    	    @Override
-    	    public void handle(ActionEvent e) {
-    	        System.out.println("This link is clicked");
-    	    }
-    	});
+
        	
     	labelCount.setText(String.valueOf(items.size()));
 
