@@ -73,6 +73,7 @@ public class WebScraper {
 	private static final String SECOND_URL = "https://www.preloved.co.uk/";
 	private WebClient client;
 	int no_of_items = 0;
+	int page_no = 0;
     private List<Item> searchRecordCache;
     private List<Item> searchRecord;
 
@@ -107,15 +108,19 @@ public class WebScraper {
 				String searchUrl = DEFAULT_URL + "search/sss?s=" + no_of_items + "&query=" + URLEncoder.encode(keyword, "UTF-8") + "&sort=rel";
 				HtmlPage page = client.getPage(searchUrl);
 				List<?> items = (List<?>) page.getByXPath("//li[@class='result-row']");
+				page_no++;
 				System.out.println("CRAIGSLIST SEARCHED");
 				
 				
 				// If we are at the end aka last page then we break and found the last page
 				if(items.size() == 0) {
-					//TODO THIS KEEPS BREAKING WHEN ON THE SECOND SEARCH
+
 					System.out.println("CRAIGSLIST BROKE");
 					break;
 				}
+				System.out.println("Page No: ");
+				System.out.println(page_no);
+				System.out.println("\n");
 	
 				for (int j = 0; j < items.size(); j++) {
 					
@@ -178,17 +183,18 @@ public class WebScraper {
 			}
 			client.close();
 			// Sorting the list of results
-			List<Item> SortedResult = result.stream().sorted(Comparator.comparing(Item::getPrice)).collect(Collectors.toList());
+			//List<Item> SortedResult = result.stream().sorted(Comparator.comparing(Item::getPrice)).collect(Collectors.toList());
 			no_of_items = 0;
+			page_no = 0;
 			
 			// Update the stored search record cache
 			searchRecordCache.clear();
 	    	searchRecordCache = searchRecord.stream().collect(Collectors.toList());
 	    	
 	    	// Update the stored search record
-			searchRecord = SortedResult;
+			searchRecord = result;
 			
-			return SortedResult;
+			return result;
 			
 		} catch (Exception e) {
 			System.out.println(e);
