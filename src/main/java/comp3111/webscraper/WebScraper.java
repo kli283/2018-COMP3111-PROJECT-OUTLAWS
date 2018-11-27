@@ -89,7 +89,8 @@ public class WebScraper {
 	}
 
 	/**
-	 * The only method implemented in this class, to scrape web content from the craigslist
+	 * Scrapes web content from craigslist. Updates the stored search record cache with 
+	 * the previous search results and updates the stored search record with the new search results.
 	 * 
 	 * @param keyword - the keyword you want to search
 	 * @return A list of Item that has found. A zero size list is return if nothing is found. Null if any exception (e.g. no connectivity)
@@ -203,7 +204,6 @@ public class WebScraper {
 	}
 	
 	/**
-	 * 
 	 * Filters the stored search record.
 	 * 
 	 * @param keyword - The keyword that the search record will be filtered by.
@@ -221,18 +221,38 @@ public class WebScraper {
     	searchRecord = refinedSearchRecord.stream().collect(Collectors.toList());
 	}
 	
+	/**
+	 * Sets the stored search record.
+	 *  
+	 * @param searchRecord - the search record to be set.
+	 */
 	public void setSearchRecord(List<Item> searchRecord) {
 		this.searchRecord = searchRecord;
 	}
 	
+	/**
+	 * Sets the stored search record cache.
+	 * 
+	 * @param searchRecordCache - The search record to be set
+	 */
 	public void setSearchRecordCache(List<Item> searchRecordCache) {
 		this.searchRecordCache = searchRecordCache;
 	}
 	
+	/**
+	 * Gets the stored search record.
+	 * 
+	 * @return The stored search record
+	 */
 	public List<Item> getSearchRecord() {
 		return searchRecord;
 	}
 	
+	/**
+	 * Gets the stored search record cache (the previous search results)
+	 * 
+	 * @return - The stored search record cache
+	 */
 	public List<Item> getSearchRecordCache() {
 		return searchRecordCache;
 	}

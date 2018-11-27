@@ -1,6 +1,3 @@
-/**
- * 
- */
 package comp3111.webscraper;
 
 import javafx.application.Platform;
@@ -24,21 +21,15 @@ import javafx.scene.control.Hyperlink;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
-import java.util.Vector;
 import java.util.stream.Collectors;
 
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import java.sql.Date;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 
 /**
- * 
- * @author kevinw
- *
+ * @authors Kaushal Kalyanasundaram, Kenny Li & Ruben Wijkmark
  *
  * Controller class that manage GUI interaction. Please see document about JavaFX for details.
  * 
