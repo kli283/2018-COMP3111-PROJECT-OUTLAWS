@@ -8,6 +8,11 @@ import java.util.Date;
 
 import javafx.scene.control.Hyperlink;
 
+/**
+ * @authors Kaushal Kalyanasundaram, Kenny Li & Ruben Wijkmark
+ * 
+ * Class representing an item that has been scraped from a website. 
+ */
 public class Item {
 	private String title ; 
 	private double price ;
@@ -15,23 +20,52 @@ public class Item {
 	private Date itemDate ;
 	private String site ; 
 	
+	/**
+	 * Get the title of the item
+	 * @return the items title
+	 */
 	public String getTitle() {
 		return title;
 	}
+	
+	/**
+	 * Set the title of the item
+	 * @param title - the title to be set
+	 */
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
+	/**
+	 * Get the price of the item
+	 * @return - the items price
+	 */
 	public double getPrice() {
 		return price;
 	}
+	
+	/**
+	 * Set the price of the item
+	 * @param price - the price to be set
+	 */
 	public void setPrice(double price) {
 		this.price = price;
 	}
+	
+	/**
+	 * Get the url of the item
+	 * 
+	 * @return the items url
+	 */
 	public Hyperlink getUrl() {
 		return url;
 	}
 	
-	
+	/**
+	 * Sets the Url of the item.
+	 * 
+	 * @param url - the url to be set.
+	 */
 	public void setUrl(String url) {
 		this.url = new Hyperlink(url);
 		
@@ -48,18 +82,39 @@ public class Item {
 		    }
 		});
 	}
+	
+	/**
+	 * Get the date of the item.
+	 * 
+	 * @return the items date.
+	 */
 	public Date getItemDate() {
 		return itemDate;
 	}
+	
+	/**
+	 * Sets the date of the item.
+	 * 
+	 * @param itemDate - the date to be set.
+	 */
 	public void setItemDate(Date itemDate) {
 		this.itemDate = itemDate;
 	}
+	
+	/**
+	 * Gets the site of the item
+	 * 
+	 * @return the items site
+	 */
 	public String getSite() {
 		return site;
 	}
+	
+	/**
+	 * Sets the site of the item. 
+	 * @param site the site to be set
+	 */
 	public void setSite(String site) {
 		this.site = site;
 	}
-	
-
 }
