@@ -29,10 +29,9 @@ import java.sql.Date;
 
 
 /**
- * @author Kaushal Kalyanasundaram, Kenny Li and Ruben Wijkmark
- *
  * Controller class that manage GUI interaction. Please see document about JavaFX for details.
  * 
+ * @author Kaushal Kalyanasundaram, Kenny Li and Ruben Wijkmark
  */
 public class Controller {
 

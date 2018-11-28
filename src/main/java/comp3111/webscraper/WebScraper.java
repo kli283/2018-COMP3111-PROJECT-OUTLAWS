@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
  * WebScraper provide code that scrape web content. After it is constructed, you can call the method scrape with a keyword, 
  * the client will go to the default url and parse the page by looking at the HTML DOM. It also stores the current scraped data and the 
  * results from the previous scrape.
+ * 
+ * @author Kaushal Kalyanasundaram, Kenny Li and Ruben Wijkmark
  */
 public class WebScraper {
 

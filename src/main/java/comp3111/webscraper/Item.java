@@ -9,9 +9,9 @@ import java.util.Date;
 import javafx.scene.control.Hyperlink;
 
 /**
- * @authors Kaushal Kalyanasundaram, Kenny Li & Ruben Wijkmark
- * 
  * Class representing an item that has been scraped from a website. 
+ * 
+ * @author Kaushal Kalyanasundaram, Kenny Li and Ruben Wijkmark
  */
 public class Item {
 	private String title ; 
