@@ -271,6 +271,7 @@ public class Controller {
      */
     @FXML
     private void actionQuit() {
+    	scraper.closeWebClient();
     	Platform.exit();
     }
     

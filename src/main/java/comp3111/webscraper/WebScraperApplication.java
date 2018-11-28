@@ -3,6 +3,9 @@
  */
 package comp3111.webscraper;
 
+import java.util.List;
+import java.util.Vector;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 

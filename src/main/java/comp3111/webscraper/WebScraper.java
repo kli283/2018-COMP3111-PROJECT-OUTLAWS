@@ -139,6 +139,7 @@ public class WebScraper {
 			no_of_items = 0;
 			page_no = 0;
 			
+			
 			// Update the stored search record cache
 			searchRecordCache.clear();
 	    	searchRecordCache = searchRecord.stream().collect(Collectors.toList());
@@ -155,6 +156,14 @@ public class WebScraper {
 	}
 	
 	/**
+	 * Closes all opened windows, stopping all background JavaScript processing of
+	 * the WebClient that is used for scraping.
+	 */
+	public void closeWebClient(){
+		client.close();
+	}
+	
+	/**
 	 * Filters the stored search record.
 	 * 
 	 * @param keyword - The keyword that the search record will be filtered by.
@@ -164,7 +173,7 @@ public class WebScraper {
     	List<Item> refinedSearchRecord = new Vector<Item>();
     	
     	for(Item item : searchRecord) {
-    		if(item.getTitle().toLowerCase().contains(keyword)) {
+    		if(item.getTitle().toLowerCase().contains(keyword.toLowerCase())) {
     			refinedSearchRecord.add(item);
     		}
     	}
